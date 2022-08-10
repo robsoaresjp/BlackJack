@@ -17,8 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class BlackJackMain extends Application
-{
+public class BlackJackMain extends Application {
     private Baralho baralho = new Baralho();
     private Mao dealer, player;
     private Text message = new Text();
@@ -32,62 +31,62 @@ public class BlackJackMain extends Application
         dealer = new Mao(dealerCartas.getChildren());
         player = new Mao(playerCartas.getChildren());
 
-    Pane mesa = new Pane();
-    mesa.setPrefSize(800, 600);
+        Pane mesa = new Pane();
+        mesa.setPrefSize(800, 600);
 
-    Region fundo = new Region();
-    fundo.setPrefSize(800, 600);
-    fundo.setStyle("-fx-fundo-color: rgba(0,0,0,1)");
+        Region fundo = new Region();
+        fundo.setPrefSize(800, 600);
+        fundo.setStyle("-fx-fundo-color: rgba(0,0,0,1)");
 
-    HBox mesaLayout = new HBox(5);
-    mesaLayout.setPadding(new Insets(5, 5, 5, 5));
-    Rectangle esquerdoBG = new Rectangle(550, 560);
-    esquerdoBG.setArcWidth(50);
-    esquerdoBG.setArcHeight(50);
-    esquerdoBG.setFill(Color.GREEN);
-    Rectangle direitoBG = new Rectangle(230, 560);
-    direitoBG.setArcWidth(50);
-    direitoBG.setArcHeight(50);
-    direitoBG.setFill(Color.ORANGE);
+        HBox mesaLayout = new HBox(5);
+        mesaLayout.setPadding(new Insets(5, 5, 5, 5));
+        Rectangle esquerdoBG = new Rectangle(550, 560);
+        esquerdoBG.setArcWidth(50);
+        esquerdoBG.setArcHeight(50);
+        esquerdoBG.setFill(Color.GREEN);
+        Rectangle direitoBG = new Rectangle(230, 560);
+        direitoBG.setArcWidth(50);
+        direitoBG.setArcHeight(50);
+        direitoBG.setFill(Color.ORANGE);
 
-    //LADO ESQUERO
-    VBox esquerdoVBox = new VBox(50);
-    esquerdoVBox.setAlignment(Pos.TOP_CENTER);
+        //LADO ESQUERO
+        VBox esquerdoVBox = new VBox(50);
+        esquerdoVBox.setAlignment(Pos.TOP_CENTER);
 
-    Text dealerScore = new Text("Dealer: ");
-    Text playerScore = new Text("Player: ");
+        Text dealerScore = new Text("Dealer: ");
+        Text playerScore = new Text("Player: ");
 
-    esquerdoVBox.getChildren().addAll(dealerScore, dealerCartas, message, playerCartas, playerScore);
+        esquerdoVBox.getChildren().addAll(dealerScore, dealerCartas, message, playerCartas, playerScore);
 
-    //LADO DIREITO
-    VBox direitoVBox = new VBox(20);
-    direitoVBox.setAlignment(Pos.CENTER);
+        //LADO DIREITO
+        VBox direitoVBox = new VBox(20);
+        direitoVBox.setAlignment(Pos.CENTER);
 
-    final TextField bet = new TextField("BET");
-    bet.setDisable(true);
-    bet.setMaxWidth(50);
-    Text money = new Text("MONEY");
+        final TextField bet = new TextField("BET");
+        bet.setDisable(true);
+        bet.setMaxWidth(50);
+        Text money = new Text("MONEY");
 
-    Button btnPlay = new Button("PLAY");
-    Button btnHit = new Button("HIT");
-    Button btnStand = new Button("STAND");
+        Button btnPlay = new Button("PLAY");
+        Button btnHit = new Button("HIT");
+        Button btnStand = new Button("STAND");
 
-    HBox buttonsHBox = new HBox(15, btnHit, btnStand);
-    buttonsHBox.setAlignment(Pos.CENTER);
-    direitoVBox.getChildren().addAll(bet, btnPlay, money, buttonsHBox);
+        HBox buttonsHBox = new HBox(15, btnHit, btnStand);
+        buttonsHBox.setAlignment(Pos.CENTER);
+        direitoVBox.getChildren().addAll(bet, btnPlay, money, buttonsHBox);
 
 
-    //ADICIONE AMBAS AS PILHAS AO LAYOUT DA MESA
+        //ADICIONE AMBAS AS PILHAS AO LAYOUT DA MESA
         mesaLayout.getChildren().addAll(new StackPane(esquerdoBG, esquerdoVBox), new StackPane(direitoBG, direitoVBox));
         mesa.getChildren().addAll(fundo, mesaLayout);
 
-    //PROPRIEDADES DO BIND
+        //PROPRIEDADES DO BIND
         btnPlay.disableProperty().bind(playable);
         btnHit.disableProperty().bind(playable.not());
         btnStand.disableProperty().bind(playable.not());
 
-        playerScore.textProperty().bind(new SimpleStringProperty("Player: ").concat(player.valueProperty().asString()));
-        dealerScore.textProperty().bind(new SimpleStringProperty("Dealer: ").concat(dealer.valueProperty().asString()));
+        playerScore.textProperty().bind(new SimpleStringProperty("Player: ").concat(player.valueProperty()));
+        dealerScore.textProperty().bind(new SimpleStringProperty("Dealer: ").concat(dealer.valueProperty()));
 
         player.valueProperty().addListener((obs, old, newValue) ->
         {
@@ -112,13 +111,13 @@ public class BlackJackMain extends Application
 
         btnHit.setOnAction(event ->
         {
-            player.levaCarta(baralho.empateCarta());
+            player.maoCarta(baralho.empateCarta());
         });
 
         btnStand.setOnAction(event ->
         {
-            while (dealer.valueProperty().get() < 17) {
-                dealer.levaCarta(baralho.empateCarta());
+            while (dealer.valueProperty().intValue() < 17) {
+                dealer.maoCarta(baralho.empateCarta());
             }
 
             endGame();
@@ -127,8 +126,7 @@ public class BlackJackMain extends Application
         return mesa;
     }
 
-    private void startNewGame()
-    {
+    private void startNewGame() {
         playable.set(true);
         message.setText("");
 
@@ -137,27 +135,24 @@ public class BlackJackMain extends Application
         dealer.reset();
         player.reset();
 
-        dealer.levaCarta(baralho.empateCarta());
-        dealer.levaCarta(baralho.empateCarta());
-        player.levaCarta(baralho.empateCarta());
-        player.levaCarta(baralho.empateCarta());
+        dealer.maoCarta(baralho.empateCarta());
+        dealer.maoCarta(baralho.empateCarta());
+        player.maoCarta(baralho.empateCarta());
+        player.maoCarta(baralho.empateCarta());
     }
 
-    private void endGame()
-    {
+    private void endGame() {
         playable.set(false);
 
-        int dealerValue = dealer.valueProperty().get();
-        int playerValue = player.valueProperty().get();
+        int dealerValue = dealer.valueProperty().intValue();
+        int playerValue = player.valueProperty().intValue();
         String winner = "Exceptional case: d: " + dealerValue + " p: " + playerValue;
 
         // the order of checking is important
         if (dealerValue == 21 || playerValue > 21 || dealerValue == playerValue
-                || (dealerValue < 21 && dealerValue > playerValue))
-        {
+                || (dealerValue < 21 && dealerValue > playerValue)) {
             winner = "DEALER";
-        } else if (playerValue == 21 || dealerValue > 21 || playerValue > dealerValue)
-        {
+        } else if (playerValue == 21 || dealerValue > 21 || playerValue > dealerValue) {
             winner = "PLAYER";
         }
 
@@ -166,8 +161,7 @@ public class BlackJackMain extends Application
 
 
     @Override
-    public void start(Stage primaryStage) throws Exception
-    {
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setScene(new Scene(createContent()));
         primaryStage.setWidth(800);
         primaryStage.setHeight(600);
@@ -175,8 +169,8 @@ public class BlackJackMain extends Application
         primaryStage.setTitle("BlackJack");
         primaryStage.show();
     }
-    public static void main(String[] args)
-    {
+
+    public static void main(String[] args) {
         launch(args);
     }
 

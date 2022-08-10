@@ -1,6 +1,6 @@
 public class Baralho
 {
-    private Carta[] cartas = new Carta[52];
+    private final Carta[] cartas = new Carta[52];
 
     public Baralho()
     {

@@ -7,41 +7,44 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class Carta extends Parent
-{
+import java.util.Objects;
+
+public class Carta extends Parent {
     private static final int CARTA_WIDTH = 100;
     private static final int CARTA_HEIGHT = 140;
-    enum Suit
-    {
-        PAUS, COPAS, ESPADAS, OURO
+
+    enum Suit {
+        PAUS, COPAS, ESPADAS, OURO;
 
         final Image images;
 
         Suit() {
-            this.images = new Image(Carta.class.getResourceAsStream("images/".concat(name().toLowerCase()).concat(".png")),
+            this.images = new Image(Objects.requireNonNull(Carta.class.getResourceAsStream("images/".concat(name().toLowerCase()).concat(".png"))),
                     32, 32, true, true);
-    };
+        }
+    }
 
-    enum Rank
-    {
+    enum Rank {
         DOIS(2), TRES(3), QUATRO(4), CINCO(5), SEIS(6), SETE(7), OITO(8), NOVE(9),
         DEZ(10), JACK(10), QUEEN(10), KING(10), ACE(11);
 
         final int value;
-        Rank(int value)
-        {
+
+        Rank(int value) {
             this.value = value;
         }
 
         String displayName() {
             return ordinal() < 9 ? String.valueOf(value) : name().substring(0, 1);
-    };
+        }
+    }
+
     public final Suit suit;
     public final Rank rank;
+
     public final int value;
 
-    public Carta(Suit suit, Rank rank)
-    {
+    public Carta(Suit suit, Rank rank) {
         this.suit = suit;
         this.rank = rank;
         this.value = rank.value;
@@ -70,10 +73,9 @@ public class Carta extends Parent
 
     }
 
-        @Override
-        public String toString()
-        {
-            return rank.toString() + " of " + suit.toString();
-        }
+    @Override
+    public String toString() {
+        return rank.toString() + " of " + suit.toString();
+    }
 }
 
